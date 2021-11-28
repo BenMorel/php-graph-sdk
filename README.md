@@ -4,21 +4,18 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/php-graph-sdk/badges/quality-score.png?b=5.x)](https://scrutinizer-ci.com/g/facebook/php-graph-sdk/?branch=5.x)
 [![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-5.7.0-blue.svg)](https://packagist.org/packages/facebook/graph-sdk)
 
-This repository contains the open source PHP SDK that allows you to access the Facebook Platform from your PHP app.
+**This repository is a fork of the abandoned [Facebook SDK for PHP](https://github.com/facebookarchive/php-graph-sdk),
+that provides compatibility with PHP 8.**
 
 ## Installation
 
 The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/). Run this command:
 
 ```sh
-composer require facebook/graph-sdk
+composer require benmorel/facebook-graph-sdk
 ```
 
 Please be aware, that there are issues when using the Facebook SDK together with [Guzzle](https://github.com/guzzle/guzzle) 6.x. php-graph-sdk v5.x only works with Guzzle 5.x out of the box. However, [there is a workaround to make it work with Guzzle 6.x](https://www.sammyk.me/how-to-inject-your-own-http-client-in-the-facebook-php-sdk-v5#writing-a-guzzle-6-http-client-implementation-from-scratch).
-
-## Upgrading to v5.x
-
-Upgrading from v4.x? Facebook PHP SDK v5.x introduced breaking changes. Please [read the upgrade guide](https://www.sammyk.me/upgrading-the-facebook-php-sdk-from-v4-to-v5) before upgrading.
 
 ## Usage
 
