@@ -23,13 +23,15 @@
  */
 namespace Facebook\Tests;
 
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
+use PHPUnit\Framework\TestCase;
 
-class FacebookRequestTest extends \PHPUnit_Framework_TestCase
+class FacebookRequestTest extends TestCase
 {
     public function testAnEmptyRequestEntityCanInstantiate()
     {
@@ -39,36 +41,30 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Facebook\FacebookRequest', $request);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testAMissingAccessTokenWillThrow()
     {
         $app = new FacebookApp('123', 'foo_secret');
         $request = new FacebookRequest($app);
 
+        $this->expectException(FacebookSDKException::class);
         $request->validateAccessToken();
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testAMissingMethodWillThrow()
     {
         $app = new FacebookApp('123', 'foo_secret');
         $request = new FacebookRequest($app);
 
+        $this->expectException(FacebookSDKException::class);
         $request->validateMethod();
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testAnInvalidMethodWillThrow()
     {
         $app = new FacebookApp('123', 'foo_secret');
         $request = new FacebookRequest($app, 'foo_token', 'FOO');
 
+        $this->expectException(FacebookSDKException::class);
         $request->validateMethod();
     }
 
@@ -109,12 +105,11 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar_token', $accessToken);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testAccessTokenConflictsWillThrow()
     {
         $app = new FacebookApp('123', 'foo_secret');
+
+        $this->expectException(FacebookSDKException::class);
         new FacebookRequest($app, 'foo_token', 'POST', '/me', ['access_token' => 'bar_token']);
     }
 

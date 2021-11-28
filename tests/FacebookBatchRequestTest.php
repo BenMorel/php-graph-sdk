@@ -23,20 +23,22 @@
  */
 namespace Facebook\Tests;
 
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookBatchRequest;
 use Facebook\FileUpload\FacebookFile;
+use PHPUnit\Framework\TestCase;
 
-class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
+class FacebookBatchRequestTest extends TestCase
 {
     /**
      * @var FacebookApp
      */
     private $app;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->app = new FacebookApp('123', 'foo_secret');
     }
@@ -80,33 +82,27 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertRequestContainsAppAndToken($request, $customApp, 'foo_token');
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testWillThrowWhenNoThereIsNoAppFallback()
     {
         $batchRequest = new FacebookBatchRequest();
 
+        $this->expectException(FacebookSDKException::class);
         $batchRequest->addFallbackDefaults(new FacebookRequest(null, 'foo_token'));
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testWillThrowWhenNoThereIsNoAccessTokenFallback()
     {
         $request = new FacebookBatchRequest();
 
+        $this->expectException(FacebookSDKException::class);
         $request->addFallbackDefaults(new FacebookRequest($this->app));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testAnInvalidTypeGivenToAddWillThrow()
     {
         $request = new FacebookBatchRequest();
 
+        $this->expectException(\InvalidArgumentException::class);
         $request->add('foo');
     }
 
@@ -168,28 +164,27 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertRequestsMatch($requests, $formattedRequests);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testAZeroRequestCountWithThrow()
     {
         $batchRequest = new FacebookBatchRequest($this->app, [], 'foo_token');
 
+        $this->expectException(FacebookSDKException::class);
         $batchRequest->validateBatchRequestCount();
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testMoreThanFiftyRequestsWillThrow()
     {
         $batchRequest = $this->createBatchRequest();
 
         $this->createAndAppendRequestsTo($batchRequest, 51);
 
+        $this->expectException(FacebookSDKException::class);
         $batchRequest->validateBatchRequestCount();
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testLessOrEqualThanFiftyRequestsWillNotThrow()
     {
         $batchRequest = $this->createBatchRequest();

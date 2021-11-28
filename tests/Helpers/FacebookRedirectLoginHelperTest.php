@@ -30,8 +30,9 @@ use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\Tests\Fixtures\FooPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooRedirectLoginOAuth2Client;
+use PHPUnit\Framework\TestCase;
 
-class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
+class FacebookRedirectLoginHelperTest extends TestCase
 {
     /**
      * @var FacebookMemoryPersistentDataHandler
@@ -49,7 +50,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     const FOO_STATE = "foo_state";
     const FOO_PARAM = "some_param=blah";
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persistentDataHandler = new FacebookMemoryPersistentDataHandler();
 
@@ -74,7 +75,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
             'scope' => implode(',', $scope),
         ];
         foreach ($params as $key => $value) {
-            $this->assertContains($key . '=' . urlencode($value), $loginUrl);
+            $this->assertStringContainsString($key . '=' . urlencode($value), $loginUrl);
         }
     }
 
@@ -123,7 +124,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
         $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
 
-        $this->assertContains('state=csprs123', $loginUrl);
+        $this->assertStringContainsString('state=csprs123', $loginUrl);
     }
 
     public function testThePseudoRandomStringGeneratorWillAutoDetectCsprsg()

@@ -24,14 +24,17 @@
 
 namespace Facebook\Tests\FileUpload;
 
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\FileUpload\FacebookResumableUploader;
 use Facebook\FileUpload\FacebookTransferChunk;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
+use PHPUnit\Framework\TestCase;
 
-class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
+class FacebookResumableUploaderTest extends TestCase
 {
     /**
      * @var FacebookApp
@@ -53,7 +56,7 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
      */
     private $file;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fbApp = new FacebookApp('app_id', 'app_secret');
         $this->graphApi = new FakeGraphApiForResumableUpload();
@@ -78,14 +81,12 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($finalResponse);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
-     */
     public function testStartWillLetErrorResponsesThrow()
     {
         $this->graphApi->failOnStart();
         $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
 
+        $this->expectException(FacebookResponseException::class);
         $uploader->start('/me/videos', $this->file);
     }
 

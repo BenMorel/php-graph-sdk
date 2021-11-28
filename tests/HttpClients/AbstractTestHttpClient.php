@@ -23,8 +23,13 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-abstract class AbstractTestHttpClient extends \PHPUnit_Framework_TestCase
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
+
+abstract class AbstractTestHttpClient extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     protected $fakeRawRedirectHeader = "HTTP/1.1 302 Found
 Content-Type: text/html; charset=utf-8
 Location: https://foobar.com/\r\n\r\n";

@@ -37,8 +37,9 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Tests\Fixtures\MyFooBatchClientHandler;
 use Facebook\Tests\Fixtures\MyFooClientHandler;
+use PHPUnit\Framework\TestCase;
 
-class FacebookClientTest extends \PHPUnit_Framework_TestCase
+class FacebookClientTest extends TestCase
 {
     /**
      * @var FacebookApp
@@ -60,7 +61,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
      */
     public static $testFacebookClient;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fbApp = new FacebookApp('id', 'shhhh!');
         $this->fbClient = new FacebookClient(new MyFooClientHandler());
@@ -167,12 +168,12 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL . '/' . Facebook::DEFAULT_GRAPH_VERSION, $url);
         $this->assertEquals('POST', $method);
-        $this->assertContains('multipart/form-data; boundary=', $headers['Content-Type']);
-        $this->assertContains('Content-Disposition: form-data; name="batch"', $body);
-        $this->assertContains('Content-Disposition: form-data; name="include_headers"', $body);
-        $this->assertContains('"name":0,"attached_files":', $body);
-        $this->assertContains('"name":1,"attached_files":', $body);
-        $this->assertContains('"; filename="foo.txt"', $body);
+        $this->assertStringContainsString('multipart/form-data; boundary=', $headers['Content-Type']);
+        $this->assertStringContainsString('Content-Disposition: form-data; name="batch"', $body);
+        $this->assertStringContainsString('Content-Disposition: form-data; name="include_headers"', $body);
+        $this->assertStringContainsString('"name":0,"attached_files":', $body);
+        $this->assertStringContainsString('"name":1,"attached_files":', $body);
+        $this->assertStringContainsString('"; filename="foo.txt"', $body);
     }
 
     public function testARequestOfParamsWillBeUrlEncoded()
@@ -193,12 +194,12 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
         $headersSent = $response->getRequest()->getHeaders();
 
-        $this->assertContains('multipart/form-data; boundary=', $headersSent['Content-Type']);
+        $this->assertStringContainsString('multipart/form-data; boundary=', $headersSent['Content-Type']);
     }
 
     public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {
-        $this->setExpectedException('Facebook\Exceptions\FacebookSDKException');
+        $this->expectException(FacebookSDKException::class);
 
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);

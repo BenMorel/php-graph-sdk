@@ -23,15 +23,15 @@
  */
 namespace Facebook\Tests\PersistentData;
 
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
+use PHPUnit\Framework\TestCase;
 
-class FacebookSessionPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
+class FacebookSessionPersistentDataHandlerTest extends TestCase
 {
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testInactiveSessionsWillThrow()
     {
+        $this->expectException(FacebookSDKException::class);
         new FacebookSessionPersistentDataHandler();
     }
 
