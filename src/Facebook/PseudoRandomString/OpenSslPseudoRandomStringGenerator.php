@@ -32,7 +32,7 @@ class OpenSslPseudoRandomStringGenerator implements PseudoRandomStringGeneratorI
     /**
      * @const string The error message when generating the string fails.
      */
-    const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from openssl_random_pseudo_bytes().';
+    protected const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from openssl_random_pseudo_bytes().';
 
     /**
      * @throws FacebookSDKException
@@ -47,7 +47,7 @@ class OpenSslPseudoRandomStringGenerator implements PseudoRandomStringGeneratorI
     /**
      * @inheritdoc
      */
-    public function getPseudoRandomString($length)
+    public function getPseudoRandomString(int $length): string
     {
         $this->validateLength($length);
 

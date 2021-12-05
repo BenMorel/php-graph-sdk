@@ -47,7 +47,7 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         $this->respondWith = 'FAIL_ON_TRANSFER_AND_UPLOAD_NEW_CHUNK';
     }
 
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         // Could be start, transfer or finish
         if (strpos($body, 'transfer') !== false) {

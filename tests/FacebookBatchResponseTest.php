@@ -70,10 +70,10 @@ class FacebookBatchResponseTest extends TestCase
         $graphResponseJson .= ']';
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);
         $batchRequest = new FacebookBatchRequest($this->app, [
-            new FacebookRequest($this->app, 'token'),
-            new FacebookRequest($this->app, 'token'),
-            new FacebookRequest($this->app, 'token'),
-            new FacebookRequest($this->app, 'token'),
+            new FacebookRequest($this->app, 'token', 'GET', ''),
+            new FacebookRequest($this->app, 'token', 'GET', ''),
+            new FacebookRequest($this->app, 'token', 'GET', ''),
+            new FacebookRequest($this->app, 'token', 'GET', ''),
         ]);
         $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 
@@ -98,9 +98,9 @@ class FacebookBatchResponseTest extends TestCase
         $graphResponseJson .= ']';
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);
         $batchRequest = new FacebookBatchRequest($this->app, [
-            'req_one' => new FacebookRequest($this->app, 'token'),
-            'req_two' => new FacebookRequest($this->app, 'token'),
-            'req_three' => new FacebookRequest($this->app, 'token'),
+            'req_one' => new FacebookRequest($this->app, 'token', 'GET', ''),
+            'req_two' => new FacebookRequest($this->app, 'token', 'GET', ''),
+            'req_three' => new FacebookRequest($this->app, 'token', 'GET', ''),
         ]);
         $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 

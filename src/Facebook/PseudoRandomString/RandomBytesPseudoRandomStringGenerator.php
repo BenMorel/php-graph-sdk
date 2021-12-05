@@ -32,7 +32,7 @@ class RandomBytesPseudoRandomStringGenerator implements PseudoRandomStringGenera
     /**
      * @const string The error message when generating the string fails.
      */
-    const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from random_bytes(). ';
+    protected const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from random_bytes(). ';
 
     /**
      * @throws FacebookSDKException
@@ -50,7 +50,7 @@ class RandomBytesPseudoRandomStringGenerator implements PseudoRandomStringGenera
     /**
      * @inheritdoc
      */
-    public function getPseudoRandomString($length)
+    public function getPseudoRandomString(int $length): string
     {
         $this->validateLength($length);
 

@@ -28,14 +28,6 @@ use PHPUnit\Framework\TestCase;
 
 class PseudoRandomStringGeneratorTraitTest extends TestCase
 {
-    public function testAnInvalidLengthWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $prsg->validateLength('foo_len');
-    }
-
     public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
     {
         $prsg = new MyFooBarPseudoRandomStringGenerator();

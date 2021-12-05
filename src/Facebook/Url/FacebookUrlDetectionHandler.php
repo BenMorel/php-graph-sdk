@@ -33,27 +33,23 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     /**
      * @inheritdoc
      */
-    public function getCurrentUrl()
+    public function getCurrentUrl(): string
     {
         return $this->getHttpScheme() . '://' . $this->getHostName() . $this->getServerVar('REQUEST_URI');
     }
 
     /**
      * Get the currently active URL scheme.
-     *
-     * @return string
      */
-    protected function getHttpScheme()
+    protected function getHttpScheme(): string
     {
         return $this->isBehindSsl() ? 'https' : 'http';
     }
 
     /**
      * Tries to detect if the server is running behind an SSL.
-     *
-     * @return boolean
      */
-    protected function isBehindSsl()
+    protected function isBehindSsl(): bool
     {
         // Check for proxy first
         $protocol = $this->getHeader('X_FORWARDED_PROTO');
@@ -71,14 +67,10 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
 
     /**
      * Detects an active SSL protocol value.
-     *
-     * @param string $protocol
-     *
-     * @return boolean
      */
-    protected function protocolWithActiveSsl($protocol)
+    protected function protocolWithActiveSsl(string $protocol): bool
     {
-        $protocol = strtolower((string)$protocol);
+        $protocol = strtolower($protocol);
 
         return in_array($protocol, ['on', '1', 'https', 'ssl'], true);
     }
@@ -89,10 +81,8 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
      * Some elements adapted from
      *
      * @see https://github.com/symfony/HttpFoundation/blob/master/Request.php
-     *
-     * @return string
      */
-    protected function getHostName()
+    protected function getHostName(): string
     {
         // Check for proxy first
         $header = $this->getHeader('X_FORWARDED_HOST');
@@ -122,7 +112,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
         return $host . $appendPort;
     }
 
-    protected function getCurrentPort()
+    protected function getCurrentPort(): string
     {
         // Check for proxy first
         $port = $this->getHeader('X_FORWARDED_PORT');
@@ -140,24 +130,16 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
 
     /**
      * Returns the a value from the $_SERVER super global.
-     *
-     * @param string $key
-     *
-     * @return string
      */
-    protected function getServerVar($key)
+    protected function getServerVar(string $key): int|string
     {
         return isset($_SERVER[$key]) ? $_SERVER[$key] : '';
     }
 
     /**
      * Gets a value from the HTTP request headers.
-     *
-     * @param string $key
-     *
-     * @return string
      */
-    protected function getHeader($key)
+    protected function getHeader(string $key): string
     {
         return $this->getServerVar('HTTP_' . $key);
     }
@@ -165,12 +147,8 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     /**
      * Checks if the value in X_FORWARDED_HOST is a valid hostname
      * Could prevent unintended redirections
-     *
-     * @param string $header
-     *
-     * @return boolean
      */
-    protected function isValidForwardedHost($header)
+    protected function isValidForwardedHost(string $header): bool
     {
         $elements = explode(',', $header);
         $host = $elements[count($elements) - 1];

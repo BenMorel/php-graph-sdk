@@ -33,22 +33,22 @@ use Facebook\FacebookResponse;
 class FacebookResponseException extends FacebookSDKException
 {
     /**
-     * @var FacebookResponse The response that threw the exception.
+     * The response that threw the exception.
      */
-    protected $response;
+    protected FacebookResponse $response;
 
     /**
-     * @var array Decoded response.
+     * Decoded response.
      */
-    protected $responseData;
+    protected array $responseData;
 
     /**
      * Creates a FacebookResponseException.
      *
-     * @param FacebookResponse     $response          The response that threw the exception.
-     * @param FacebookSDKException $previousException The more detailed exception.
+     * @param FacebookResponse          $response          The response that threw the exception.
+     * @param FacebookSDKException|null $previousException The more detailed exception.
      */
-    public function __construct(FacebookResponse $response, FacebookSDKException $previousException = null)
+    public function __construct(FacebookResponse $response, ?FacebookSDKException $previousException = null)
     {
         $this->response = $response;
         $this->responseData = $response->getDecodedBody();
@@ -63,10 +63,8 @@ class FacebookResponseException extends FacebookSDKException
      * A factory for creating the appropriate exception based on the response from Graph.
      *
      * @param FacebookResponse $response The response that threw the exception.
-     *
-     * @return FacebookResponseException
      */
-    public static function create(FacebookResponse $response)
+    public static function create(FacebookResponse $response): FacebookResponseException
     {
         $data = $response->getDecodedBody();
 
@@ -148,13 +146,8 @@ class FacebookResponseException extends FacebookSDKException
 
     /**
      * Checks isset and returns that or a default value.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
      */
-    private function get($key, $default = null)
+    private function get(string $key, mixed $default = null): mixed
     {
         if (isset($this->responseData['error'][$key])) {
             return $this->responseData['error'][$key];
@@ -165,60 +158,48 @@ class FacebookResponseException extends FacebookSDKException
 
     /**
      * Returns the HTTP status code
-     *
-     * @return int
      */
-    public function getHttpStatusCode()
+    public function getHttpStatusCode(): ?int
     {
         return $this->response->getHttpStatusCode();
     }
 
     /**
      * Returns the sub-error code
-     *
-     * @return int
      */
-    public function getSubErrorCode()
+    public function getSubErrorCode(): int
     {
         return $this->get('error_subcode', -1);
     }
 
     /**
      * Returns the error type
-     *
-     * @return string
      */
-    public function getErrorType()
+    public function getErrorType(): string
     {
         return $this->get('type', '');
     }
 
     /**
      * Returns the raw response used to create the exception.
-     *
-     * @return string
      */
-    public function getRawResponse()
+    public function getRawResponse(): string
     {
         return $this->response->getBody();
     }
 
     /**
      * Returns the decoded response used to create the exception.
-     *
-     * @return array
      */
-    public function getResponseData()
+    public function getResponseData(): array
     {
         return $this->responseData;
     }
 
     /**
      * Returns the response entity used to create the exception.
-     *
-     * @return FacebookResponse
      */
-    public function getResponse()
+    public function getResponse(): FacebookResponse
     {
         return $this->response;
     }

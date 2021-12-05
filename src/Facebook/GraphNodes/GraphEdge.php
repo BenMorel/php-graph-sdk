@@ -35,24 +35,24 @@ use Facebook\Exceptions\FacebookSDKException;
 class GraphEdge extends Collection
 {
     /**
-     * @var FacebookRequest The original request that generated this data.
+     * The original request that generated this data.
      */
-    protected $request;
+    protected FacebookRequest $request;
 
     /**
-     * @var array An array of Graph meta data like pagination, etc.
+     * An array of Graph meta data like pagination, etc.
      */
-    protected $metaData = [];
+    protected array $metaData = [];
 
     /**
-     * @var string|null The parent Graph edge endpoint that generated the list.
+     * The parent Graph edge endpoint that generated the list.
      */
-    protected $parentEdgeEndpoint;
+    protected ?string $parentEdgeEndpoint;
 
     /**
-     * @var string|null The subclass of the child GraphNode's.
+     * The subclass of the child GraphNode's.
      */
-    protected $subclassName;
+    protected ?string $subclassName;
 
     /**
      * Init this collection of GraphNode's.
@@ -63,7 +63,7 @@ class GraphEdge extends Collection
      * @param string|null     $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
      * @param string|null     $subclassName       The subclass of the child GraphNode's.
      */
-    public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
+    public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], ?string $parentEdgeEndpoint = null, ?string $subclassName = null)
     {
         $this->request = $request;
         $this->metaData = $metaData;
@@ -75,50 +75,40 @@ class GraphEdge extends Collection
 
     /**
      * Gets the parent Graph edge endpoint that generated the list.
-     *
-     * @return string|null
      */
-    public function getParentGraphEdge()
+    public function getParentGraphEdge(): ?string
     {
         return $this->parentEdgeEndpoint;
     }
 
     /**
      * Gets the subclass name that the child GraphNode's are cast as.
-     *
-     * @return string|null
      */
-    public function getSubClassName()
+    public function getSubClassName(): ?string
     {
         return $this->subclassName;
     }
 
     /**
      * Returns the raw meta data associated with this GraphEdge.
-     *
-     * @return array
      */
-    public function getMetaData()
+    public function getMetaData(): array
     {
         return $this->metaData;
     }
 
     /**
      * Returns the next cursor if it exists.
-     *
-     * @return string|null
      */
-    public function getNextCursor()
+    public function getNextCursor(): ?string
     {
         return $this->getCursor('after');
     }
 
     /**
      * Returns the previous cursor if it exists.
-     *
-     * @return string|null
      */
-    public function getPreviousCursor()
+    public function getPreviousCursor(): ?string
     {
         return $this->getCursor('before');
     }
@@ -127,10 +117,8 @@ class GraphEdge extends Collection
      * Returns the cursor for a specific direction if it exists.
      *
      * @param string $direction The direction of the page: after|before
-     *
-     * @return string|null
      */
-    public function getCursor($direction)
+    public function getCursor(string $direction): ?string
     {
         if (isset($this->metaData['paging']['cursors'][$direction])) {
             return $this->metaData['paging']['cursors'][$direction];
@@ -144,11 +132,9 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: next|previous
      *
-     * @return string|null
-     *
      * @throws FacebookSDKException
      */
-    public function getPaginationUrl($direction)
+    public function getPaginationUrl(string $direction): ?string
     {
         $this->validateForPagination();
 
@@ -167,7 +153,7 @@ class GraphEdge extends Collection
      *
      * @throws FacebookSDKException
      */
-    public function validateForPagination()
+    public function validateForPagination(): void
     {
         if ($this->request->getMethod() !== 'GET') {
             throw new FacebookSDKException('You can only paginate on a GET request.', 720);
@@ -179,11 +165,9 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: next|previous
      *
-     * @return FacebookRequest|null
-     *
      * @throws FacebookSDKException
      */
-    public function getPaginationRequest($direction)
+    public function getPaginationRequest(string $direction): ?FacebookRequest
     {
         $pageUrl = $this->getPaginationUrl($direction);
         if (!$pageUrl) {
@@ -199,11 +183,9 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "next" page request.
      *
-     * @return FacebookRequest|null
-     *
      * @throws FacebookSDKException
      */
-    public function getNextPageRequest()
+    public function getNextPageRequest(): ?FacebookRequest
     {
         return $this->getPaginationRequest('next');
     }
@@ -211,11 +193,9 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "previous" page request.
      *
-     * @return FacebookRequest|null
-     *
      * @throws FacebookSDKException
      */
-    public function getPreviousPageRequest()
+    public function getPreviousPageRequest(): ?FacebookRequest
     {
         return $this->getPaginationRequest('previous');
     }
@@ -224,10 +204,8 @@ class GraphEdge extends Collection
      * The total number of results according to Graph if it exists.
      *
      * This will be returned if the summary=true modifier is present in the request.
-     *
-     * @return int|null
      */
-    public function getTotalCount()
+    public function getTotalCount(): ?int
     {
         if (isset($this->metaData['summary']['total_count'])) {
             return $this->metaData['summary']['total_count'];
@@ -239,7 +217,7 @@ class GraphEdge extends Collection
     /**
      * @inheritDoc
      */
-    public function map(\Closure $callback)
+    public function map(\Closure $callback): static
     {
         return new static(
             $this->request,

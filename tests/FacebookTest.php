@@ -267,16 +267,6 @@ class FacebookTest extends TestCase
         );
     }
 
-    public function testSettingAnAccessThatIsNotStringOrAccessTokenThrows()
-    {
-        $config = array_merge($this->config, [
-            'default_access_token' => 123,
-        ]);
-
-        $this->expectException(\InvalidArgumentException::class);
-        new Facebook($config);
-    }
-
     public function testCreatingANewRequestWillDefaultToTheProperConfig()
     {
         $config = array_merge($this->config, [
@@ -354,7 +344,7 @@ class FacebookTest extends TestCase
         ]);
         $fb = new Facebook($config);
 
-        $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET');
+        $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET', '');
         $graphEdge = new GraphEdge(
             $request,
             [],

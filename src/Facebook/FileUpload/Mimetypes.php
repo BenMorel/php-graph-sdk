@@ -34,11 +34,10 @@ namespace Facebook\FileUpload;
  */
 class Mimetypes
 {
-    /** @var self */
-    protected static $instance;
+    protected static ?self $instance = null;
 
-    /** @var array Mapping of extension to mimetype */
-    protected $mimetypes = [
+    /** Mapping of extension to mimetype */
+    protected array $mimetypes = [
         '3dml' => 'text/vnd.in3d.3dml',
         '3g2' => 'video/3gpp2',
         '3gp' => 'video/3gpp',
@@ -948,10 +947,9 @@ class Mimetypes
     /**
      * Get a singleton instance of the class
      *
-     * @return self
      * @codeCoverageIgnore
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (!self::$instance) {
             self::$instance = new self();
@@ -964,10 +962,8 @@ class Mimetypes
      * Get a mimetype value from a file extension
      *
      * @param string $extension File extension
-     *
-     * @return string|null
      */
-    public function fromExtension($extension)
+    public function fromExtension(string $extension): ?string
     {
         $extension = strtolower($extension);
 
@@ -978,10 +974,8 @@ class Mimetypes
      * Get a mimetype from a filename
      *
      * @param string $filename Filename to generate a mimetype from
-     *
-     * @return string|null
      */
-    public function fromFilename($filename)
+    public function fromFilename(string $filename): ?string
     {
         return $this->fromExtension(pathinfo($filename, PATHINFO_EXTENSION));
     }

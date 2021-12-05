@@ -36,7 +36,7 @@ class FacebookRequestTest extends TestCase
     public function testAnEmptyRequestEntityCanInstantiate()
     {
         $app = new FacebookApp('123', 'foo_secret');
-        $request = new FacebookRequest($app);
+        $request = new FacebookRequest($app, null, 'GET', '');
 
         $this->assertInstanceOf('Facebook\FacebookRequest', $request);
     }
@@ -44,25 +44,16 @@ class FacebookRequestTest extends TestCase
     public function testAMissingAccessTokenWillThrow()
     {
         $app = new FacebookApp('123', 'foo_secret');
-        $request = new FacebookRequest($app);
+        $request = new FacebookRequest($app, null, 'GET', '');
 
         $this->expectException(FacebookSDKException::class);
         $request->validateAccessToken();
     }
 
-    public function testAMissingMethodWillThrow()
-    {
-        $app = new FacebookApp('123', 'foo_secret');
-        $request = new FacebookRequest($app);
-
-        $this->expectException(FacebookSDKException::class);
-        $request->validateMethod();
-    }
-
     public function testAnInvalidMethodWillThrow()
     {
         $app = new FacebookApp('123', 'foo_secret');
-        $request = new FacebookRequest($app, 'foo_token', 'FOO');
+        $request = new FacebookRequest($app, 'foo_token', 'FOO', '');
 
         $this->expectException(FacebookSDKException::class);
         $request->validateMethod();

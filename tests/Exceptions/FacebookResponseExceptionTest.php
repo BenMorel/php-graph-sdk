@@ -31,7 +31,6 @@ use PHPUnit\Framework\TestCase;
 
 class FacebookResponseExceptionTest extends TestCase
 {
-
     /**
      * @var FacebookRequest
      */
@@ -39,7 +38,7 @@ class FacebookResponseExceptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = new FacebookRequest(new FacebookApp('123', 'foo'));
+        $this->request = new FacebookRequest(new FacebookApp('123', 'foo'), null, 'GET', '');
     }
 
     public function testAuthenticationExceptions()

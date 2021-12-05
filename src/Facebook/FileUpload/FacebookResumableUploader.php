@@ -38,33 +38,21 @@ use Facebook\FacebookRequest;
  */
 class FacebookResumableUploader
 {
-    /**
-     * @var FacebookApp
-     */
-    protected $app;
+    protected FacebookApp $app;
+
+    protected string $accessToken;
 
     /**
-     * @var string
+     * The Facebook client service.
      */
-    protected $accessToken;
+    protected FacebookClient $client;
 
     /**
-     * @var FacebookClient The Facebook client service.
+     * Graph version to use for this request.
      */
-    protected $client;
+    protected string $graphVersion;
 
-    /**
-     * @var string Graph version to use for this request.
-     */
-    protected $graphVersion;
-
-    /**
-     * @param FacebookApp             $app
-     * @param FacebookClient          $client
-     * @param AccessToken|string|null $accessToken
-     * @param string                  $graphVersion
-     */
-    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $graphVersion)
+    public function __construct(FacebookApp $app, FacebookClient $client, AccessToken|string|null $accessToken, string $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
@@ -75,14 +63,9 @@ class FacebookResumableUploader
     /**
      * Upload by chunks - start phase
      *
-     * @param string $endpoint
-     * @param FacebookFile $file
-     *
-     * @return FacebookTransferChunk
-     *
      * @throws FacebookSDKException
      */
-    public function start($endpoint, FacebookFile $file)
+    public function start(string $endpoint, FacebookFile $file): FacebookTransferChunk
     {
         $params = [
             'upload_phase' => 'start',
@@ -96,15 +79,9 @@ class FacebookResumableUploader
     /**
      * Upload by chunks - transfer phase
      *
-     * @param string $endpoint
-     * @param FacebookTransferChunk $chunk
-     * @param boolean $allowToThrow
-     *
-     * @return FacebookTransferChunk
-     *
      * @throws FacebookResponseException
      */
-    public function transfer($endpoint, FacebookTransferChunk $chunk, $allowToThrow = false)
+    public function transfer(string $endpoint, FacebookTransferChunk $chunk, bool $allowToThrow = false): FacebookTransferChunk
     {
         $params = [
             'upload_phase' => 'transfer',
@@ -141,15 +118,11 @@ class FacebookResumableUploader
     /**
      * Upload by chunks - finish phase
      *
-     * @param string $endpoint
-     * @param string $uploadSessionId
      * @param array $metadata The metadata associated with the file.
-     *
-     * @return boolean
      *
      * @throws FacebookSDKException
      */
-    public function finish($endpoint, $uploadSessionId, $metadata = [])
+    public function finish(string $endpoint, string $uploadSessionId, array $metadata = []): bool
     {
         $params = array_merge($metadata, [
             'upload_phase' => 'finish',
@@ -164,11 +137,9 @@ class FacebookResumableUploader
      * Helper to make a FacebookRequest and send it.
      *
      * @param string $endpoint The endpoint to POST to.
-     * @param array $params The params to send with the request.
-     *
-     * @return array
+     * @param array  $params   The params to send with the request.
      */
-    private function sendUploadRequest($endpoint, $params = [])
+    private function sendUploadRequest(string $endpoint, array $params = []): array
     {
         $request = new FacebookRequest($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
 

@@ -31,14 +31,12 @@ namespace Facebook\GraphNodes;
 class GraphNode extends Collection
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * Maps object key names to Graph object types.
      */
-    protected static $graphObjectMap = [];
+    protected static array $graphObjectMap = [];
 
     /**
      * Init this Graph object.
-     *
-     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -52,10 +50,8 @@ class GraphNode extends Collection
      * @TODO Add auto-casting to AccessToken entities.
      *
      * @param array $data The array to iterate over.
-     *
-     * @return array
      */
-    public function castItems(array $data)
+    public function castItems(array $data): array
     {
         $items = [];
 
@@ -78,10 +74,8 @@ class GraphNode extends Collection
     /**
      * Uncasts any auto-casted datatypes.
      * Basically the reverse of castItems().
-     *
-     * @return array
      */
-    public function uncastItems()
+    public function uncastItems(): array
     {
         $items = $this->asArray();
 
@@ -96,12 +90,8 @@ class GraphNode extends Collection
 
     /**
      * Get the collection of items as JSON.
-     *
-     * @param int $options
-     *
-     * @return string
      */
-    public function asJson($options = 0)
+    public function asJson(int $options = 0): string
     {
         return json_encode($this->uncastItems(), $options);
     }
@@ -109,15 +99,11 @@ class GraphNode extends Collection
     /**
      * Detects an ISO 8601 formatted string.
      *
-     * @param string $string
-     *
-     * @return boolean
-     *
      * @see https://developers.facebook.com/docs/graph-api/using-graph-api/#readmodifiers
      * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
      * @see http://en.wikipedia.org/wiki/ISO_8601
      */
-    public function isIso8601DateString($string)
+    public function isIso8601DateString(string $string): bool
     {
         // This insane regex was yoinked from here:
         // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
@@ -135,12 +121,8 @@ class GraphNode extends Collection
 
     /**
      * Determines if a value from Graph should be cast to DateTime.
-     *
-     * @param string $key
-     *
-     * @return boolean
      */
-    public function shouldCastAsDateTime($key)
+    public function shouldCastAsDateTime(string $key): bool
     {
         return in_array($key, [
             'created_time',
@@ -157,12 +139,8 @@ class GraphNode extends Collection
 
     /**
      * Casts a date value from Graph to DateTime.
-     *
-     * @param int|string $value
-     *
-     * @return \DateTime
      */
-    public function castToDateTime($value)
+    public function castToDateTime(int|string $value): \DateTime
     {
         if (is_int($value)) {
             $dt = new \DateTime();
@@ -176,22 +154,16 @@ class GraphNode extends Collection
 
     /**
      * Casts a birthday value from Graph to Birthday
-     *
-     * @param string $value
-     *
-     * @return Birthday
      */
-    public function castToBirthday($value)
+    public function castToBirthday(string $value): Birthday
     {
         return new Birthday($value);
     }
 
     /**
      * Getter for $graphObjectMap.
-     *
-     * @return array
      */
-    public static function getObjectMap()
+    public static function getObjectMap(): array
     {
         return static::$graphObjectMap;
     }

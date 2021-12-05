@@ -41,42 +41,32 @@ class OAuth2Client
     /**
      * @const string The base authorization URL.
      */
-    const BASE_AUTHORIZATION_URL = 'https://www.facebook.com';
+    protected const BASE_AUTHORIZATION_URL = 'https://www.facebook.com';
 
     /**
      * The FacebookApp entity.
-     *
-     * @var FacebookApp
      */
-    protected $app;
+    protected FacebookApp $app;
 
     /**
      * The Facebook client.
-     *
-     * @var FacebookClient
      */
-    protected $client;
+    protected FacebookClient $client;
 
     /**
      * The version of the Graph API to use.
-     *
-     * @var string
      */
-    protected $graphVersion;
+    protected string $graphVersion;
 
     /**
      * The last request sent to Graph.
-     *
-     * @var FacebookRequest|null
      */
-    protected $lastRequest;
+    protected ?FacebookRequest $lastRequest = null;
 
     /**
-     * @param FacebookApp    $app
-     * @param FacebookClient $client
-     * @param string|null    $graphVersion The version of the Graph API to use.
+     * @param string|null $graphVersion The version of the Graph API to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
+    public function __construct(FacebookApp $app, FacebookClient $client, ?string $graphVersion = null)
     {
         $this->app = $app;
         $this->client = $client;
@@ -86,10 +76,8 @@ class OAuth2Client
     /**
      * Returns the last FacebookRequest that was sent.
      * Useful for debugging and testing.
-     *
-     * @return FacebookRequest|null
      */
-    public function getLastRequest()
+    public function getLastRequest(): ?FacebookRequest
     {
         return $this->lastRequest;
     }
@@ -98,10 +86,8 @@ class OAuth2Client
      * Get the metadata associated with the access token.
      *
      * @param AccessToken|string $accessToken The access token to debug.
-     *
-     * @return AccessTokenMetadata
      */
-    public function debugToken($accessToken)
+    public function debugToken(AccessToken|string $accessToken): AccessTokenMetadata
     {
         $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = ['input_token' => $accessToken];
@@ -129,10 +115,8 @@ class OAuth2Client
      * @param array  $scope       An array of permissions to request.
      * @param array  $params      An array of parameters to generate URL.
      * @param string $separator   The separator to use in http_build_query().
-     *
-     * @return string
      */
-    public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&')
+    public function getAuthorizationUrl(string $redirectUrl, string $state, array $scope = [], array $params = [], string $separator = '&'): string
     {
         $params += [
             'client_id' => $this->app->getId(),
@@ -149,14 +133,9 @@ class OAuth2Client
     /**
      * Get a valid access token from a code.
      *
-     * @param string $code
-     * @param string $redirectUri
-     *
-     * @return AccessToken
-     *
      * @throws FacebookSDKException
      */
-    public function getAccessTokenFromCode($code, $redirectUri = '')
+    public function getAccessTokenFromCode(string $code, string $redirectUri = ''): AccessToken
     {
         $params = [
             'code' => $code,
@@ -169,13 +148,9 @@ class OAuth2Client
     /**
      * Exchanges a short-lived access token with a long-lived access token.
      *
-     * @param AccessToken|string $accessToken
-     *
-     * @return AccessToken
-     *
      * @throws FacebookSDKException
      */
-    public function getLongLivedAccessToken($accessToken)
+    public function getLongLivedAccessToken(AccessToken|string $accessToken): AccessToken
     {
         $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = [
@@ -189,14 +164,9 @@ class OAuth2Client
     /**
      * Get a valid code from an access token.
      *
-     * @param AccessToken|string $accessToken
-     * @param string             $redirectUri
-     *
-     * @return AccessToken
-     *
      * @throws FacebookSDKException
      */
-    public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = '')
+    public function getCodeFromLongLivedAccessToken(AccessToken|string $accessToken, string $redirectUri = ''): AccessToken|string
     {
         $params = [
             'redirect_uri' => $redirectUri,
@@ -215,13 +185,9 @@ class OAuth2Client
     /**
      * Send a request to the OAuth endpoint.
      *
-     * @param array $params
-     *
-     * @return AccessToken
-     *
      * @throws FacebookSDKException
      */
-    protected function requestAnAccessToken(array $params)
+    protected function requestAnAccessToken(array $params): AccessToken
     {
         $response = $this->sendRequestWithClientParams('/oauth/access_token', $params);
         $data = $response->getDecodedBody();
@@ -250,15 +216,9 @@ class OAuth2Client
     /**
      * Send a request to Graph with an app access token.
      *
-     * @param string                  $endpoint
-     * @param array                   $params
-     * @param AccessToken|string|null $accessToken
-     *
-     * @return FacebookResponse
-     *
      * @throws FacebookResponseException
      */
-    protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null)
+    protected function sendRequestWithClientParams(string $endpoint, array $params, AccessToken|string|null $accessToken = null): FacebookResponse
     {
         $params += $this->getClientParams();
 
@@ -279,10 +239,8 @@ class OAuth2Client
 
     /**
      * Returns the client_* params for OAuth requests.
-     *
-     * @return array
      */
-    protected function getClientParams()
+    protected function getClientParams(): array
     {
         return [
             'client_id' => $this->app->getId(),

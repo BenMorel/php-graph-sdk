@@ -29,14 +29,14 @@ use Facebook\Exceptions\FacebookSDKException;
 class FacebookStreamHttpClient implements FacebookHttpClientInterface
 {
     /**
-     * @var FacebookStream Procedural stream wrapper as object.
+     * Procedural stream wrapper as object.
      */
-    protected $facebookStream;
+    protected FacebookStream $facebookStream;
 
     /**
      * @param FacebookStream|null Procedural stream wrapper as object.
      */
-    public function __construct(FacebookStream $facebookStream = null)
+    public function __construct(?FacebookStream $facebookStream = null)
     {
         $this->facebookStream = $facebookStream ?: new FacebookStream();
     }
@@ -44,7 +44,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         $options = [
             'http' => [
@@ -79,10 +79,8 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
      * Formats the headers for use in the stream wrapper.
      *
      * @param array $headers The request headers.
-     *
-     * @return string
      */
-    public function compileHeader(array $headers)
+    public function compileHeader(array $headers): string
     {
         $header = [];
         foreach ($headers as $k => $v) {

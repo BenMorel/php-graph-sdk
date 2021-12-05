@@ -31,14 +31,12 @@ namespace Facebook\Http;
 class RequestBodyUrlEncoded implements RequestBodyInterface
 {
     /**
-     * @var array The parameters to send with this request.
+     * The parameters to send with this request.
      */
-    protected $params = [];
+    protected array $params = [];
 
     /**
      * Creates a new GraphUrlEncodedBody entity.
-     *
-     * @param array $params
      */
     public function __construct(array $params)
     {
@@ -48,7 +46,7 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(): string
     {
         return http_build_query($this->params);
     }

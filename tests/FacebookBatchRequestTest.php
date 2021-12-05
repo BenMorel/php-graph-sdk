@@ -56,7 +56,7 @@ class FacebookBatchRequestTest extends TestCase
 
     public function testEmptyRequestWillFallbackToBatchDefaults()
     {
-        $request = new FacebookRequest();
+        $request = new FacebookRequest(null, null, '', '');
 
         $this->createBatchRequest()->addFallbackDefaults($request);
 
@@ -65,7 +65,7 @@ class FacebookBatchRequestTest extends TestCase
 
     public function testRequestWithTokenOnlyWillFallbackToBatchDefaults()
     {
-        $request = new FacebookRequest(null, 'bar_token');
+        $request = new FacebookRequest(null, 'bar_token', 'GET', '');
 
         $this->createBatchRequest()->addFallbackDefaults($request);
 
@@ -75,7 +75,7 @@ class FacebookBatchRequestTest extends TestCase
     public function testRequestWithAppOnlyWillFallbackToBatchDefaults()
     {
         $customApp = new FacebookApp('1337', 'bar_secret');
-        $request = new FacebookRequest($customApp);
+        $request = new FacebookRequest($customApp, null, 'GET', '');
 
         $this->createBatchRequest()->addFallbackDefaults($request);
 
@@ -87,7 +87,7 @@ class FacebookBatchRequestTest extends TestCase
         $batchRequest = new FacebookBatchRequest();
 
         $this->expectException(FacebookSDKException::class);
-        $batchRequest->addFallbackDefaults(new FacebookRequest(null, 'foo_token'));
+        $batchRequest->addFallbackDefaults(new FacebookRequest(null, 'foo_token', 'GET', ''));
     }
 
     public function testWillThrowWhenNoThereIsNoAccessTokenFallback()
@@ -95,15 +95,7 @@ class FacebookBatchRequestTest extends TestCase
         $request = new FacebookBatchRequest();
 
         $this->expectException(FacebookSDKException::class);
-        $request->addFallbackDefaults(new FacebookRequest($this->app));
-    }
-
-    public function testAnInvalidTypeGivenToAddWillThrow()
-    {
-        $request = new FacebookBatchRequest();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $request->add('foo');
+        $request->addFallbackDefaults(new FacebookRequest($this->app, null, 'GET', ''));
     }
 
     public function testAddingRequestsWillBeFormattedInAnArrayProperly()
@@ -394,7 +386,7 @@ class FacebookBatchRequestTest extends TestCase
     private function createAndAppendRequestsTo(FacebookBatchRequest $batchRequest, $number)
     {
         for ($i = 0; $i < $number; $i++) {
-            $batchRequest->add(new FacebookRequest());
+            $batchRequest->add(new FacebookRequest(null, null, 'GET', ''));
         }
     }
 

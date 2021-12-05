@@ -31,14 +31,14 @@ namespace Facebook\PersistentData;
 class FacebookMemoryPersistentDataHandler implements PersistentDataInterface
 {
     /**
-     * @var array The session data to keep in memory.
+     * The session data to keep in memory.
      */
-    protected $sessionData = [];
+    protected array $sessionData = [];
 
     /**
      * @inheritdoc
      */
-    public function get($key)
+    public function get(string $key): mixed
     {
         return isset($this->sessionData[$key]) ? $this->sessionData[$key] : null;
     }
@@ -46,7 +46,7 @@ class FacebookMemoryPersistentDataHandler implements PersistentDataInterface
     /**
      * @inheritdoc
      */
-    public function set($key, $value)
+    public function set(string $key, mixed $value): void
     {
         $this->sessionData[$key] = $value;
     }

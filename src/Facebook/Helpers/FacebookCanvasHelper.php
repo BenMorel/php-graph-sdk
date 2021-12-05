@@ -32,20 +32,16 @@ class FacebookCanvasHelper extends FacebookSignedRequestFromInputHelper
 {
     /**
      * Returns the app data value.
-     *
-     * @return mixed|null
      */
-    public function getAppData()
+    public function getAppData(): mixed
     {
         return $this->signedRequest ? $this->signedRequest->get('app_data') : null;
     }
 
     /**
      * Get raw signed request from POST.
-     *
-     * @return string|null
      */
-    public function getRawSignedRequest()
+    public function getRawSignedRequest(): ?string
     {
         return $this->getRawSignedRequestFromPost() ?: null;
     }

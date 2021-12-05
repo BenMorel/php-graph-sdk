@@ -32,7 +32,7 @@ class McryptPseudoRandomStringGenerator implements PseudoRandomStringGeneratorIn
     /**
      * @const string The error message when generating the string fails.
      */
-    const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from mcrypt_create_iv(). ';
+    protected const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from mcrypt_create_iv(). ';
 
     /**
      * @throws FacebookSDKException
@@ -50,7 +50,7 @@ class McryptPseudoRandomStringGenerator implements PseudoRandomStringGeneratorIn
     /**
      * @inheritdoc
      */
-    public function getPseudoRandomString($length)
+    public function getPseudoRandomString(int $length): string
     {
         $this->validateLength($length);
 

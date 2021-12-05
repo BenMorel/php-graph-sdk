@@ -35,20 +35,17 @@ use ArrayAccess;
 class FacebookBatchResponse extends FacebookResponse implements IteratorAggregate, ArrayAccess
 {
     /**
-     * @var FacebookBatchRequest The original entity that made the batch request.
+     * The original entity that made the batch request.
      */
-    protected $batchRequest;
+    protected FacebookBatchRequest $batchRequest;
 
     /**
-     * @var array An array of FacebookResponse entities.
+     * An array of FacebookResponse entities.
      */
-    protected $responses = [];
+    protected array $responses = [];
 
     /**
      * Creates a new Response entity.
-     *
-     * @param FacebookBatchRequest $batchRequest
-     * @param FacebookResponse     $response
      */
     public function __construct(FacebookBatchRequest $batchRequest, FacebookResponse $response)
     {
@@ -66,10 +63,8 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
 
     /**
      * Returns an array of FacebookResponse entities.
-     *
-     * @return array
      */
-    public function getResponses()
+    public function getResponses(): array
     {
         return $this->responses;
     }
@@ -77,10 +72,8 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * The main batch response will be an array of requests so
      * we need to iterate over all the responses.
-     *
-     * @param array $responses
      */
-    public function setResponses(array $responses)
+    public function setResponses(array $responses): void
     {
         $this->responses = [];
 
@@ -91,11 +84,8 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
 
     /**
      * Add a response to the list.
-     *
-     * @param int        $key
-     * @param array|null $response
      */
-    public function addResponse($key, $response)
+    public function addResponse(int $key, ?array $response): void
     {
         $originalRequestName = isset($this->batchRequest[$key]['name']) ? $this->batchRequest[$key]['name'] : $key;
         $originalRequest = isset($this->batchRequest[$key]['request']) ? $this->batchRequest[$key]['request'] : null;
@@ -116,7 +106,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->responses);
     }
@@ -124,7 +114,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->addResponse($offset, $value);
     }
@@ -132,7 +122,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->responses[$offset]);
     }
@@ -140,7 +130,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->responses[$offset]);
     }
@@ -148,20 +138,16 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
-        return isset($this->responses[$offset]) ? $this->responses[$offset] : null;
+        return $this->responses[$offset] ?? null;
     }
 
     /**
      * Converts the batch header array into a standard format.
      * @TODO replace with array_column() when PHP 5.5 is supported.
-     *
-     * @param array $batchHeaders
-     *
-     * @return array
      */
-    private function normalizeBatchHeaders(array $batchHeaders)
+    private function normalizeBatchHeaders(array $batchHeaders): array
     {
         $headers = [];
 

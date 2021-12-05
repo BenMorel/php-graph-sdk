@@ -34,14 +34,14 @@ use GuzzleHttp\Exception\RequestException;
 class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
 {
     /**
-     * @var \GuzzleHttp\Client The Guzzle client.
+     * The Guzzle client.
      */
-    protected $guzzleClient;
+    protected Client $guzzleClient;
 
     /**
-     * @param \GuzzleHttp\Client|null The Guzzle client.
+     * @param Client|null $guzzleClient The Guzzle client.
      */
-    public function __construct(Client $guzzleClient = null)
+    public function __construct(?Client $guzzleClient = null)
     {
         $this->guzzleClient = $guzzleClient ?: new Client();
     }
@@ -49,7 +49,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         $options = [
             'headers' => $headers,
@@ -81,10 +81,8 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
      * Returns the Guzzle array of headers as a string.
      *
      * @param ResponseInterface $response The Guzzle response.
-     *
-     * @return string
      */
-    public function getHeadersAsString(ResponseInterface $response)
+    public function getHeadersAsString(ResponseInterface $response): string
     {
         $headers = $response->getHeaders();
         $rawHeaders = [];

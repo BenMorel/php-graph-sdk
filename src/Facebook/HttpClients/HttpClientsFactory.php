@@ -37,14 +37,10 @@ class HttpClientsFactory
     /**
      * HTTP client generation.
      *
-     * @param FacebookHttpClientInterface|Client|string|null $handler
-     *
      * @throws Exception                If the cURL extension or the Guzzle client aren't available (if required).
      * @throws InvalidArgumentException If the http client handler isn't "curl", "stream", "guzzle", or an instance of Facebook\HttpClients\FacebookHttpClientInterface.
-     *
-     * @return FacebookHttpClientInterface
      */
-    public static function createHttpClient($handler)
+    public static function createHttpClient(FacebookHttpClientInterface|Client|string|null $handler): FacebookHttpClientInterface
     {
         if (!$handler) {
             return self::detectDefaultClient();
@@ -81,10 +77,8 @@ class HttpClientsFactory
 
     /**
      * Detect default HTTP client.
-     *
-     * @return FacebookHttpClientInterface
      */
-    private static function detectDefaultClient()
+    private static function detectDefaultClient(): FacebookHttpClientInterface
     {
         if (extension_loaded('curl')) {
             return new FacebookCurlHttpClient();

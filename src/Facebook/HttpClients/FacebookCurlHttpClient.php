@@ -34,29 +34,29 @@ use Facebook\Exceptions\FacebookSDKException;
 class FacebookCurlHttpClient implements FacebookHttpClientInterface
 {
     /**
-     * @var string The client error message
+     * @The client error message
      */
-    protected $curlErrorMessage = '';
+    protected string $curlErrorMessage = '';
 
     /**
-     * @var int The curl client error code
+     * The curl client error code
      */
-    protected $curlErrorCode = 0;
+    protected int $curlErrorCode = 0;
 
     /**
-     * @var string|boolean The raw response from the server
+     * The raw response from the server
      */
-    protected $rawResponse;
+    protected string|bool $rawResponse;
 
     /**
-     * @var FacebookCurl Procedural curl as object
+     * Procedural curl as object
      */
-    protected $facebookCurl;
+    protected FacebookCurl $facebookCurl;
 
     /**
      * @param FacebookCurl|null Procedural curl as object
      */
-    public function __construct(FacebookCurl $facebookCurl = null)
+    public function __construct(?FacebookCurl $facebookCurl = null)
     {
         $this->facebookCurl = $facebookCurl ?: new FacebookCurl();
     }
@@ -64,7 +64,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         $this->openConnection($url, $method, $body, $headers, $timeOut);
         $this->sendRequest();
@@ -90,7 +90,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
      * @param array  $headers The request headers.
      * @param int    $timeOut The timeout in seconds for the request.
      */
-    public function openConnection($url, $method, $body, array $headers, $timeOut)
+    public function openConnection(string $url, string $method, string $body, array $headers, int $timeOut): void
     {
         $options = [
             CURLOPT_CUSTOMREQUEST => $method,
@@ -116,7 +116,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     /**
      * Closes an existing curl connection
      */
-    public function closeConnection()
+    public function closeConnection(): void
     {
         $this->facebookCurl->close();
     }
@@ -124,7 +124,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     /**
      * Send the request and get the raw response from curl
      */
-    public function sendRequest()
+    public function sendRequest(): void
     {
         $this->rawResponse = $this->facebookCurl->exec();
     }
@@ -133,10 +133,8 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
      * Compiles the request headers into a curl-friendly format.
      *
      * @param array $headers The request headers.
-     *
-     * @return array
      */
-    public function compileRequestHeaders(array $headers)
+    public function compileRequestHeaders(array $headers): array
     {
         $return = [];
 
@@ -149,10 +147,8 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
 
     /**
      * Extracts the headers and the body into a two-part array
-     *
-     * @return array
      */
-    public function extractResponseHeadersAndBody()
+    public function extractResponseHeadersAndBody(): array
     {
         $parts = explode("\r\n\r\n", $this->rawResponse);
         $rawBody = array_pop($parts);

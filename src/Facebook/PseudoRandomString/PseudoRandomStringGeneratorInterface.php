@@ -37,9 +37,7 @@ interface PseudoRandomStringGeneratorInterface
      *
      * @param int $length The length of the string to return.
      *
-     * @return string
-     *
      * @throws \Facebook\Exceptions\FacebookSDKException|\InvalidArgumentException
      */
-    public function getPseudoRandomString($length);
+    public function getPseudoRandomString(int $length): string;
 }

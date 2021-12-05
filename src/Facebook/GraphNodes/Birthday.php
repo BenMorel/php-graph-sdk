@@ -32,15 +32,9 @@ use DateTime;
  */
 class Birthday extends DateTime
 {
-    /**
-     * @var bool
-     */
-    private $hasDate = false;
+    private bool $hasDate = false;
 
-    /**
-     * @var bool
-     */
-    private $hasYear = false;
+    private bool $hasYear = false;
 
     /**
      * Parses Graph birthday format to set indication flags, possible values:
@@ -50,10 +44,8 @@ class Birthday extends DateTime
      *  YYYY
      *
      * @link https://developers.facebook.com/docs/graph-api/reference/user
-     *
-     * @param string $date
      */
-    public function __construct($date)
+    public function __construct(string $date)
     {
         $parts = explode('/', $date);
 
@@ -65,20 +57,16 @@ class Birthday extends DateTime
 
     /**
      * Returns whether date object contains birth day and month
-     *
-     * @return bool
      */
-    public function hasDate()
+    public function hasDate(): bool
     {
         return $this->hasDate;
     }
 
     /**
      * Returns whether date object contains birth year
-     *
-     * @return bool
      */
-    public function hasYear()
+    public function hasYear(): bool
     {
         return $this->hasYear;
     }

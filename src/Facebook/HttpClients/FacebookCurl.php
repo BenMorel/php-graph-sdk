@@ -41,80 +41,63 @@ class FacebookCurl
     /**
      * Make a new curl reference instance
      */
-    public function init()
+    public function init(): void
     {
         $this->curl = curl_init();
     }
 
     /**
      * Set a curl option
-     *
-     * @param $key
-     * @param $value
      */
-    public function setopt($key, $value)
+    public function setopt(int $key, mixed $value): void
     {
         curl_setopt($this->curl, $key, $value);
     }
 
     /**
      * Set an array of options to a curl resource
-     *
-     * @param array $options
      */
-    public function setoptArray(array $options)
+    public function setoptArray(array $options): void
     {
         curl_setopt_array($this->curl, $options);
     }
 
     /**
      * Send a curl request
-     *
-     * @return mixed
      */
-    public function exec()
+    public function exec(): string|bool
     {
         return curl_exec($this->curl);
     }
 
     /**
      * Return the curl error number
-     *
-     * @return int
      */
-    public function errno()
+    public function errno(): ?int
     {
         return curl_errno($this->curl);
     }
 
     /**
      * Return the curl error message
-     *
-     * @return string
      */
-    public function error()
+    public function error(): string
     {
         return curl_error($this->curl);
     }
 
     /**
      * Get info from a curl reference
-     *
-     * @param $type
-     *
-     * @return mixed
      */
-    public function getinfo($type)
+    public function getinfo(?int $type): mixed
     {
         return curl_getinfo($this->curl, $type);
     }
 
     /**
      * Get the currently installed curl version
-     *
-     * @return array
      */
-    public function version()
+    public function version(): array|false
     {
         return curl_version();
     }
@@ -122,7 +105,7 @@ class FacebookCurl
     /**
      * Close the resource connection to curl
      */
-    public function close()
+    public function close(): void
     {
         curl_close($this->curl);
     }

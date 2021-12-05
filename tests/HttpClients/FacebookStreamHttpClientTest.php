@@ -120,7 +120,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
         $this->streamMock
             ->shouldReceive('getResponseHeaders')
             ->once()
-            ->andReturn(null);
+            ->andReturn([]);
         $this->streamMock
             ->shouldReceive('fileGetContents')
             ->once()

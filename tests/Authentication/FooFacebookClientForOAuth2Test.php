@@ -46,7 +46,7 @@ class FooFacebookClientForOAuth2Test extends FacebookClient
         $this->response = '{"code":"my_neat_code"}';
     }
 
-    public function sendRequest(FacebookRequest $request)
+    public function sendRequest(FacebookRequest $request): FacebookResponse
     {
         return new FacebookResponse(
             $request,
